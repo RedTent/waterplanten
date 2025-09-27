@@ -11,6 +11,7 @@ Data en achtergrondrapporten zijn beschikbaar op <https://www.stowa.nl/publicati
 - Leggen van soortrelaties
 - Vinden locaties (+ kenmerken) met gelijkende vegetaties
 - Kaart-weergave van locaties.
+- Nadenken over niet taxonomische groepen en soorten die niet in TWN staan
 
 
 

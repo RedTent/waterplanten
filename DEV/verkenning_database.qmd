@@ -1,0 +1,78 @@
+---
+title: "Waterplanten en waterkwaliteit"
+subtitle: "Een verkenning"
+format: html
+code-fold: show
+warning: false
+message: false
+---
+
+## Verbinden met de database
+
+```{r}
+library(magrittr)
+```
+
+
+
+```{r}
+con <- DBI::dbConnect(odbc::odbc(), 
+                 .connection_string = paste0(
+                 "Driver={Microsoft Access Driver (*.mdb, *.accdb)};", 
+                 "DBQ=../data-raw/Waterplanten en Waterkwaliteit 2015-2021_def.accdb;" 
+                 ))
+```
+
+## Weergave tabellen
+
+```{r}
+tabellen_raw <- DBI::dbListTables(con)
+
+tabellen <- tabellen_raw[stringr::str_detect(tabellen_raw, "^MSys", negate = TRUE)]
+
+purrr::walk(tabellen, 
+            \(tabelnaam) {
+              print(paste("Tabelnaam: ", tabelnaam))
+              
+              tabel <- dplyr::tbl(con, tabelnaam)
+              
+              # tabel %>% dplyr::collect() %>%  nrow() %>% paste("Aantal rijen:", .) %>% print()
+              
+              tabel %>% 
+                dplyr::collect() %>% 
+                dplyr::glimpse()
+            })
+
+```
+
+
+## Kaart met locaties
+
+```{r}
+library(sf)
+library(leaflet)
+library(dplyr)
+
+locs <- dplyr::tbl(con, "Locations")
+
+locs %>%  
+  dplyr::collect() %>% 
+  dplyr::filter(!is.na(X_RD)) %>% 
+  sf::st_as_sf(coords = c("X_RD", "Y_RD"), crs = 28992, remove = FALSE) %>%  
+  sf::st_transform(crs = 4326) %>%  
+  leaflet() %>%  
+  addTiles()  %>%  
+  addCircleMarkers(label = ~paste(Location_Name, Landscape_NL), 
+                   stroke = FALSE, fillOpacity = 0.9)
+
+
+
+```
+
+
+```{r}
+odbc::dbDisconnect(con)
+sessioninfo::session_info()
+```
+
+
