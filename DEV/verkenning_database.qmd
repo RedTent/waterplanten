@@ -11,32 +11,26 @@ message: false
 
 ```{r}
 library(magrittr)
+library(arrow)
+library(dplyr)
 ```
 
 
 
 ```{r}
-con <- DBI::dbConnect(odbc::odbc(), 
-                 .connection_string = paste0(
-                 "Driver={Microsoft Access Driver (*.mdb, *.accdb)};", 
-                 "DBQ=../data-raw/Waterplanten en Waterkwaliteit 2015-2021_def.accdb;" 
-                 ))
+
 ```
 
 ## Weergave tabellen
 
 ```{r}
-tabellen_raw <- DBI::dbListTables(con)
-
-tabellen <- tabellen_raw[stringr::str_detect(tabellen_raw, "^MSys", negate = TRUE)]
+tabellen <- list.files("../data-raw/parquet", full.names = TRUE)
 
 purrr::walk(tabellen, 
             \(tabelnaam) {
-              print(paste("Tabelnaam: ", tabelnaam))
+              print(paste("Tabelnaam: ", basename(tabelnaam)))
               
-              tabel <- dplyr::tbl(con, tabelnaam)
-              
-              # tabel %>% dplyr::collect() %>%  nrow() %>% paste("Aantal rijen:", .) %>% print()
+              tabel <- open_dataset(tabelnaam)
               
               tabel %>% 
                 dplyr::collect() %>% 
@@ -53,9 +47,9 @@ library(sf)
 library(leaflet)
 library(dplyr)
 
-locs <- dplyr::tbl(con, "Locations")
+# locs <- dplyr::tbl(con, "Locations")
 
-locs %>%  
+open_dataset("../data-raw/parquet/Locations.parquet") %>%  
   dplyr::collect() %>% 
   dplyr::filter(!is.na(X_RD)) %>% 
   sf::st_as_sf(coords = c("X_RD", "Y_RD"), crs = 28992, remove = FALSE) %>%  
@@ -71,7 +65,7 @@ locs %>%
 
 
 ```{r}
-odbc::dbDisconnect(con)
+# odbc::dbDisconnect(con)
 sessioninfo::session_info()
 ```
 
