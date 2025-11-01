@@ -9,9 +9,17 @@ Data en achtergrondrapporten zijn beschikbaar op <https://www.stowa.nl/publicati
 devtools::install_github("RedTent/waterplanten")
 ```
 
+``` r
+# Laad alle data
+laad_data_waterplanten()
+
+```
+
 ## Geïmplementeerde functionaliteit
 
 Dataset en bijbehorende databestanden.
+
+De databestanden zijn in parquet format. In het package worden ze geïnstalleerd onder extdata. Ze zijn op Github ook beschikbaar onder data-raw.
 
 
 ## Ideeën voor functies
