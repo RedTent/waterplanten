@@ -21,9 +21,20 @@ for (tabelnaam in tabellen){
   
 }
 
-# physicochemical_data <- physicochemical_data |> as.data.frame() |> tibble::as_tibble()
 
-
+# Het printen borgt dat de data opgehaald worden en dat de afhankelijkheid van arrow vermeden wordt.
+print(c(compartments,
+        datasets,
+        landscape_data,
+        landscape_parameters,
+        locations,
+        methods,
+        physicochemical_data,
+        physicochemical_parameters,
+        samples,
+        units,
+        vegetation_data,
+        zones))
 
 usethis::use_data(compartments,
                   datasets,
