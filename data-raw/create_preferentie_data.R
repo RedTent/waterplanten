@@ -102,6 +102,8 @@ _ow_klassen <-
   verwerk_klassegrenzen() %>% 
   mutate(parameter = "" , eenheid = "umol/l", compartiment = "OW", .before = klasse) 
 
+
+
 # Testcode ----------------------------------------------------------------
 
 library(HHSKwkl)
