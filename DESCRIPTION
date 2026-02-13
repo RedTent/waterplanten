@@ -1,10 +1,11 @@
 Package: waterplanten
 Title: Dataset Van Waterplanten En Waterkwaliteit
-Version: 0.1.1
+Version: 0.2.0
 Authors@R: 
     person("Johan", "van Tent", , "j.van.tent@hhsk.nl", role = c("aut", "cre"))
 Description: Het package stelt de data van waterplanten en waterkwaliteit beschikbaar.
     Mogelijk volgt er later meer functionaliteit.
+Language: nl
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)

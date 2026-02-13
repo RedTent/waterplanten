@@ -1,9 +1,9 @@
-#' Tabellen
+#' Brondata van dataset waterplanten en waterkwaliteit
 #' 
 #' Dit zijn alle tabellen van de dataset waterplanten en waterkwaliteit.
-#' Zie ook <https://www.stowa.nl/publicaties/rapporten-en-dataset-behorende-bij-het-boek-waterplanten-en-waterkwaliteit>
+#' Zie ook <>
 #' 
-#' De databestanden zijn opgenomen in het package als parquet-bestanden onder extdata.
+#' @seealso [Rapporten en dataset behorende bij het boek 'Waterplanten en waterkwaliteit'](https://www.stowa.nl/publicaties/rapporten-en-dataset-behorende-bij-het-boek-waterplanten-en-waterkwaliteit)
 #' 
 #' @name data_waterplanten
 
@@ -45,16 +45,24 @@
 "zones"
 
 
-if (getRversion() >= "2.15.1")  utils::globalVariables(c("compartments",
-                                                         "datasets",
-                                                         "landscape_data",
-                                                         "landscape_parameters",
-                                                         "locations",
-                                                         "methods",
-                                                         "physicochemical_data",
-                                                         "physicochemical_parameters",
-                                                         "samples",
-                                                         "units",
-                                                         "vegetation_data",
-                                                         "zones"
-))
+
+#' Preferentiewaarden
+#' 
+#' Dit zijn alle tabellen met preferentiewaarden van het project waterplanten en waterkwaliteit. 
+#' De tabellen zijn in zijn geheel met uitleg te vinden het *Achtergrondrapport Waterplanten en Waterkwaliteit*.
+#' 
+#' 
+#' In de tabel `preferentie_klassen` is het relatieve voorkomen per klasse opgenomen.
+#' In de tabel `preferentie_waarden` zijn de overige preferentiewaarden opgenomen.
+#' 
+#' @seealso [Achtergrondrapport Waterplanten en Waterkwaliteit](https://www.stowa.nl/sites/default/files/assets/PUBLICATIES/Publicaties%202025/STOWA-2025-27%20Waterplanten%20en%20waterkwaliteit/STOWA-2025-27-waterplanten-en-waterkwaliteit.pdf)
+#' 
+#' @name preferenties
+
+
+ 
+#' @rdname preferenties
+"preferentie_klassen"
+
+#' @rdname preferenties
+"preferentie_waarden"

@@ -1,3 +1,9 @@
+# waterplanten 0.2.0
+
+## Wijzigingen
+
+- De preferentietabellen zijn toegevoegd onder `preferentie_klassen` en `preferentie_waarden`.
+
 # waterplanten 0.1.1
 
 ## Wijzigingen

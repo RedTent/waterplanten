@@ -1,6 +1,6 @@
 # waterplanten
 
-Mogelijke opzet voor een package op basis van de dataset Waterplanten en Waterkwaliteit.
+Package op basis van de dataset Waterplanten en Waterkwaliteit.
 
 Data en achtergrondrapporten zijn beschikbaar op <https://www.stowa.nl/publicaties/rapporten-en-dataset-behorende-bij-het-boek-waterplanten-en-waterkwaliteit>.
 
@@ -15,11 +15,13 @@ laad_data_waterplanten()
 
 ```
 
+``` r
+head(preferentie_klassen)
+head(preferentie_waarden)
+
+```
+
 ## Geïmplementeerde functionaliteit
-
-Dataset en bijbehorende databestanden.
-
-De databestanden zijn in parquet format. In het package worden ze geïnstalleerd onder extdata. Ze zijn op Github ook beschikbaar onder data-raw.
 
 
 ## Ideeën voor functies

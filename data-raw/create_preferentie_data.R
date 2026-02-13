@@ -1,3 +1,5 @@
+# Het aantal wateren in een klasse wordt nog niet uit de tabellen gehaald
+
 library(tidyverse)
 library(readxl)
 
@@ -27,24 +29,54 @@ verwerk_klassegrenzen <- function(df) {
     pivot_longer(cols = !c(1:3, indicatiewaarde, gewogen_gem, optimum, gemod_chi, any_of("p90")), names_to = "klasse", values_to = "relatief_voorkomen") %>% 
     mutate(klasse = str_remove_all(klasse, "[[:space:]]")) %>% 
     add_grenzen() %>% 
-    type_convert()
+    type_convert() %>% 
+    mutate(indicatiewaarde = unname(c("-" = 0,"*" = 1, "**" = 2, "***" = 3)[indicatiewaarde]))
   
 }
 
 # Geautomatiseerd ---------------------------------------------------------
 
-referentie_bestanden <- read_excel("data-raw/overzicht_referentiebestanden.xlsx") 
+preferentie_bestanden <- read_excel("data-raw/overzicht_preferentiebestanden.xlsx") 
 
-referentie_raw <- referentie_bestanden %>% mutate(raw = map(bestandsnaam, read_excel))
+preferentie_raw <- referentie_bestanden %>% mutate(raw = map(bestandsnaam, read_excel))
 
-referentie_opgeschoond <-
+preferentie_opgeschoond <-
   referentie_raw %>% 
   mutate(klassen = map(raw, verwerk_klassegrenzen)) %>% 
   unnest(klassen) %>% 
-  select(-raw, -bestandsnaam)
+  select(-raw, -bestandsnaam) %>% 
+  labelled::set_variable_labels(
+    parameter  = "Parameter",
+    eenheid = "Eenheid",
+    compartiment = "Compartiment",
+    omrekenfactor_naar_mg_l = "Factor om mee te vermenigvuldigen voor mg/l. (N en P: mg N/l of mg P/l)",
+    naam = "Wetenschappelijke naam",
+    nednaam = "Nederlandse naam",
+    n_wateren_met_soort = "Aantal wateren waar de soort is aangetroffen in de brondata",
+    indicatiewaarde = "Indicatiegewicht (0-3)",
+    gewogen_gem = "Gewogen gemiddelde (o.b.v. klassen)",
+    optimum = "Optimum (o.b.v. abundantie waarnemingen)",
+    gemod_chi = "Gemodificeerde chi-waarde",
+    klasse = "Klasse abiotische factor",
+    ondergrens = "Ondergrens van de klasse",
+    bovengrens = "Bovengrens van de klasse",
+    relatief_voorkomen = "Relatief voorkomen van de soort binnen de klasse",
+    p90 = "90-percentiel waaronder  90% van de soorten voorkomt"
+  )
 
-referentie_opgeschoond %>% 
-  select(parameter, eenheid, compartiment)
+
+preferentie_klassen <- 
+  preferentie_opgeschoond %>% 
+  select(parameter, eenheid, compartiment, omrekenfactor_naar_mg_l, naam, nednaam, n_wateren_met_soort,
+         klasse, ondergrens, bovengrens, relatief_voorkomen, indicatiewaarde)
+
+preferentie_waarden <- 
+  preferentie_opgeschoond %>% 
+  select(parameter, eenheid, compartiment, omrekenfactor_naar_mg_l, naam, nednaam, n_wateren_met_soort,
+         indicatiewaarde, gewogen_gem, optimum, gemod_chi, p90)
+
+use_data(preferentie_klassen, preferentie_waarden, 
+         overwrite = TRUE)
 
 # Testcode ----------------------------------------------------------------
 

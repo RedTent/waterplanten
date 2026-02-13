@@ -15,7 +15,7 @@
 \alias{units}
 \alias{vegetation_data}
 \alias{zones}
-\title{Tabellen}
+\title{Brondata van dataset waterplanten en waterkwaliteit}
 \format{
 An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 5 rows and 3 columns.
 
@@ -68,9 +68,9 @@ zones
 }
 \description{
 Dit zijn alle tabellen van de dataset waterplanten en waterkwaliteit.
-Zie ook \url{https://www.stowa.nl/publicaties/rapporten-en-dataset-behorende-bij-het-boek-waterplanten-en-waterkwaliteit}
+Zie ook <>
 }
-\details{
-De databestanden zijn opgenomen in het package als parquet-bestanden onder extdata.
+\seealso{
+\href{https://www.stowa.nl/publicaties/rapporten-en-dataset-behorende-bij-het-boek-waterplanten-en-waterkwaliteit}{Rapporten en dataset behorende bij het boek 'Waterplanten en waterkwaliteit'}
 }
 \keyword{datasets}
