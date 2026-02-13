@@ -18,19 +18,34 @@ add_grenzen <- function(df) {
   
 } 
 
+# verwerk_klassegrenzen <- function(df) {
+#   
+#   df %>% 
+#     .[-(1:3),] %>% 
+#     janitor::row_to_names(1) %>% 
+#     select(-ind, -`gewogen gemid.`, -optim., -`gemod. chi waarde`, -any_of("90-quantiel")) %>% 
+#     rename(naam = 1, nednaam = 2, n_wateren_met_soort = 3) %>% 
+#     filter(!is.na(naam)) %>% 
+#     pivot_longer(cols = !1:3, names_to = "klasse", values_to = "relatief_voorkomen") %>% 
+#     mutate(klasse = str_remove_all(klasse, "[[:space:]]")) %>% 
+#     add_grenzen() %>% 
+#     type_convert()
+#     
+# }
+
 verwerk_klassegrenzen <- function(df) {
   
   df %>% 
     .[-(1:3),] %>% 
     janitor::row_to_names(1) %>% 
-    select(-ind, -`gewogen gemid.`, -optim., -`gemod. chi waarde`, -any_of("90-quantiel")) %>% 
-    rename(naam = 1, nednaam = 2, n_wateren_met_soort = 3) %>% 
+    rename(naam = 1, nednaam = 2, n_wateren_met_soort = 3, 
+           indicatiewaarde = ind, gewogen_gem = `gewogen gemid.`, optimum = optim., gemod_chi = `gemod. chi waarde`, p90 = any_of("90-quantiel")) %>% 
     filter(!is.na(naam)) %>% 
-    pivot_longer(cols = !1:3, names_to = "klasse", values_to = "relatief_voorkomen") %>% 
+    pivot_longer(cols = !c(1:3, indicatiewaarde, gewogen_gem, optimum, gemod_chi, any_of("p90")), names_to = "klasse", values_to = "relatief_voorkomen") %>% 
     mutate(klasse = str_remove_all(klasse, "[[:space:]]")) %>% 
     add_grenzen() %>% 
     type_convert()
-    
+  
 }
 
 
@@ -40,11 +55,14 @@ referentie_bestanden <- read_excel("data-raw/overzicht_referentiebestanden.xlsx"
 
 referentie_raw <- referentie_bestanden %>% mutate(raw = map(bestandsnaam, read_excel))
 
-alle_klassen <-
+referentie_opgeschoond <-
   referentie_raw %>% 
-  # group_by(parameter, eenheid, compartiment) %>% 
   mutate(klassen = map(raw, verwerk_klassegrenzen)) %>% 
-  unnest(klassen)
+  unnest(klassen) %>% 
+  select(-raw, -bestandsnaam)
+
+referentie_opgeschoond %>% 
+  select(parameter, eenheid, compartiment)
 
 # Testcode ----------------------------------------------------------------
 
@@ -56,7 +74,7 @@ soorten <- c("Chara globularis", "Utricularia vulgaris", "Lemna minor")
 
 
 
-alle_klassen %>%
+referentie_opgeschoond %>%
   mutate(klasse = fct_reorder(klasse, ondergrens)) %>%
   filter(naam %in% soorten) %>%
   group_by(parameter, compartiment, klasse) %>%
